@@ -7,7 +7,7 @@ function Home() {
     <>
       <Head>
         <meta charSet="uft-8"/>
-        <title>Home : Twitter</title>
+        <title>Home : Node Bird</title>
       </Head>
       <AppLayout>
         <div>Hello, Next!</div>

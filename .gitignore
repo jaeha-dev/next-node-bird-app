@@ -1,4 +1,5 @@
 docs/note-webstorm.txt
-
+.idea/
+.next/
 # Project exclude paths
 /front/node_modules/

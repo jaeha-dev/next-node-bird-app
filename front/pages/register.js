@@ -7,7 +7,7 @@ function Register() {
     <>
       <Head>
         <meta charSet="uft-8"/>
-        <title>Register : Twitter</title>
+        <title>Register : Node Bird</title>
       </Head>
       <AppLayout>
         <div>계정 등록</div>

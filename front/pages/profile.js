@@ -7,7 +7,7 @@ function Profile() {
     <>
       <Head>
         <meta charSet="uft-8"/>
-        <title>Profile : Twitter</title>
+        <title>Profile : Node Bird</title>
       </Head>
       <AppLayout>
         <div>계정 프로필</div>

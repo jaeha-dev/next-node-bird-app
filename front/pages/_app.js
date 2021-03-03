@@ -12,7 +12,7 @@ function App({Component}) {
     <>
       <Head>
         <meta charSet="uft-8"/>
-        <title>Twitter</title>
+        <title>Node Bird</title>
       </Head>
       <div>공통 메뉴</div>
       <Component/>
