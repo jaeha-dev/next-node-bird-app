@@ -1,0 +1,18 @@
+1) Next.js 설치
+- npm i next@9
+- yarn add react react-dom
+(react, react-dom 종속성을 추가 안해도 가능했다.)
+- yarn add prop-types
+- yarn add -D eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
+- yarn add antd @ant-design/icons styled-components
+- yarn add react-icons
+
+2) pages 디렉터리
+- Next.js가 인식하는 디렉터리로 해당 디렉터리 내의 파일을 웹 페이지로 변환한다.
+(components 디렉터리는 원하는 이름을 사용해도 된다.)
+
+3) Layout
+- 여러 개의 Layout을 만들 수 있다.
+
+4) 개발 모드일 때, Link를 사용한 웹 페이지 전환이 느리다.
+- 배포 모드로 변경하면 느린 현상이 없어진다.
