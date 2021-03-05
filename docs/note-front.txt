@@ -5,7 +5,7 @@
 - yarn add prop-types
 - yarn add -D eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
 - yarn add antd @ant-design/icons styled-components
-- yarn add react-icons
+- yarn add redux react-redux next-redux-wrapper
 
 2) pages 디렉터리
 - Next.js가 인식하는 디렉터리로 해당 디렉터리 내의 파일을 웹 페이지로 변환한다.
@@ -13,6 +13,59 @@
 
 3) Layout
 - 여러 개의 Layout을 만들 수 있다.
+(AppLayout.js를 여러 개 만들어서 부분적인 공통 요소를 사용할 수 있다.)
+- _app.js는 모든 웹 페이지의 공통 요소이지만 Layout은 그 중에서도 몇몇 웹 페이지에만 적용하는 공통 요소이다.
 
 4) 개발 모드일 때, Link를 사용한 웹 페이지 전환이 느리다.
 - 배포 모드로 변경하면 느린 현상이 없어진다.
+
+5) Redux가 언제 필요한지?
+- 로그인 여부, 로그인 계정 정보와 같이 여러 컴포넌트에서 공통적으로 사용하는 데이터를 관리할 때 사용한다.
+(부모 컴포넌트에서 props로 내려주는 과정을 중앙 데이터 저장소로 대체하는 것이다.)
+- React Context API, Redux, MobX, Recoil, GraphQL(Apollo) 등을 중앙 데이터 저장소로 사용한다.
+- 중앙 데이터 저장소는 특히, 서버에서 데이터를 받아올 때 사용한다.
+(서버에 문제가 있을 때를 고려해서 비동기 방식으로 데이터를 받아와야 한다.)
+- React Context API는 비동기 요청과 성공, 실패에 대한 로직을 모두 구현해야 하는 단점이 있다.
+(컴포넌트에 useEffect 훅과 axios 라이브러리를 사용해서 로직을 구현하는 경우가 많은데, 코드 중복 등의 문제점이 발생한다.)
+(컴포넌트는 화면 그리기에 중점을 두어야 하는데, 데이터를 받아 오는 로직은 별도의 모듈에서 처리해야 한다.)
+(물론 useEffect 훅 등을 분리해서 비동기 처리를 구현하지만 결국 redux나 mobx를 사용하는 것과 유사해진다.)
+
+5-1) 앱의 규모가 커질수록 중앙 데이터 저장소의 크기가 커진다면?
+- reducer를 여러 개로 분리할 수 있으므로 저장소를 나눌 수 있다.
+
+5-2) 불변성?
+- {} === {} // false
+(객체를 생성해서 비교할 때는 false)
+- const a = {};
+  const b = a;
+  a === b; // true
+(객체를 참조해서 비교할 때는 true)
+
+- reducer의 경우를 보면
+  switch (action.type) {
+    case 'CHANGE_NAME':
+      // return은 새로운 객체를 생성해서 반환한다는 의미이다.
+      return {
+        // ...은 비구조화 할당
+        ...state, // 변경할 값을 제외한 나머지 값은 그대로 사용하되, (바뀌지 않는 부분은 메모리를 낭비하지 않기 위해 새로 생성하지 않고 참조 관계를 유지한다.)
+        name: action.data, // 변경할 값만 바꿔서 새로운 객체를 생성한다.
+      }
+  }
+
+5-3) 왜 새로운 객체를 생성하는지?
+- 값의 변경을 기록하기 위해서이다. (디버깅, 테스트 등의 용이성 때문)
+(개발 모드일 때는 모든 기록을 유지하지만 배포 모드일 때 주기적으로 정리한다.)
+- 아래의 경우는 새로운 객체를 생성하는 경우이다.
+  const prev = { name: 'A' };
+  const next = { name: 'B' };
+- 아래의 경우는 기존 객체를 참조해서 변경하는 경우이다.
+  const prev = { name: 'A' };
+  const next = prev; // next는 prev 객체를 가리킨다.
+  next.name = 'B'; // next의 name 속성 값을 변경하면,
+  (prev.name => 'B') // prev의 name 속성 값까지 변경된다. (즉, 원래의 prev.name 값에 대한 기록이 지워진다.)
+
+5-4) 비구조화 할당
+- const prev = { a: 'test' };
+  const next = { ...prev };
+  prev.a === next.a; // true
+  prev === next; // false
