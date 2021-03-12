@@ -15,7 +15,8 @@ const SearchInput = styled(Input.Search)`
 function AppLayout({ children }) {
 	// Redux를 사용하므로 삭제한다.
 	// const [isLogin, setIsLogin] = useState(false);
-	const isLogin = useSelector((state) => state.user.isLogin);
+	// const isLogin = useSelector((state) => state.user.isLogin);
+	const { isLogin } = useSelector((state) => state.user);
 
 	return (
 		<div>
