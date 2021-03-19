@@ -1,4 +1,4 @@
-import { Button, Card, Popover, Avatar } from 'antd';
+import { Button, Card, Popover, Avatar, List, Comment } from 'antd';
 import {
 	RetweetOutlined,
 	HeartOutlined,
@@ -10,6 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import PostImages from './PostImages';
+import CommentForm from './CommentForm';
 
 function PostCard({ post }) {
 	const { me } = useSelector((state) => state.user);
@@ -29,7 +30,7 @@ function PostCard({ post }) {
 	return (
 		<div style={{ marginBottom: 20 }}>
 			<Card
-				cover={post.Images[0] && <PostImages imapge={post.Images}/>}
+				cover={post.Images[0] && <PostImages images={post.Images}/>}
 				// 배열에 컴포넌트를 추가할 때 key 속성을 추가해야 한다.
 				actions={[
 					<RetweetOutlined key="retweet"/>,
@@ -69,9 +70,25 @@ function PostCard({ post }) {
 					description={post.content}
 				/>
 			</Card>
-			{commentFormOpen && <div>댓글 폼</div>}
-			{/* <CommentForm /> */}
-			{/* <Comments /> */}
+			{commentFormOpen && (
+				<div>
+					<CommentForm post={post}/>
+					<List
+						header={`${post.Comments.length}개의 댓글`}
+						itemLayout="horizontal"
+						dataSource={post.Comments}
+						renderItem={(item) => (
+							<li>
+								<Comment
+									author={item.User.nickname}
+									avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+									content={item.content}
+								/>
+							</li>
+						)}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

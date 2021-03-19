@@ -6,6 +6,8 @@
 - yarn add -D eslint eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
 - yarn add antd @ant-design/icons styled-components
 - yarn add redux react-redux next-redux-wrapper
+- yarn add redux-devtools-extension
+- yarn add react-slick
 
 2) pages 디렉터리
 - Next.js가 인식하는 디렉터리로 해당 디렉터리 내의 파일을 웹 페이지로 변환한다.
