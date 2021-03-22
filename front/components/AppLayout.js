@@ -3,13 +3,26 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
-// Style
 const SearchInput = styled(Input.Search)`
 	vertical-align: middle;
+`;
+
+// 하단 스크롤이 생기지 않도록 antd의 기본 CSS를 수정한다.
+const Global = createGlobalStyle`
+  .ant-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .ant-col:first-child {
+    padding-left: 0 !important;
+  }
+  .ant-col:last-child {
+    padding-right: 0 !important;
+  }
 `;
 
 function AppLayout({ children }) {
@@ -20,6 +33,7 @@ function AppLayout({ children }) {
 
 	return (
 		<div>
+			<Global/>
 			<Menu mode="horizontal">
 				<Menu.Item>
 					<Link href="/">
