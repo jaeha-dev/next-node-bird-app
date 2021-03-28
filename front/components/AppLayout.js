@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
 const SearchInput = styled(Input.Search)`
-	vertical-align: middle;
+  vertical-align: middle;
 `;
 
 // 하단 스크롤이 생기지 않도록 antd의 기본 CSS를 수정한다.
@@ -29,7 +29,7 @@ function AppLayout({ children }) {
 	// Redux를 사용하므로 삭제한다.
 	// const [isLogin, setIsLogin] = useState(false);
 	// const isLogin = useSelector((state) => state.user.isLogin);
-	const { isLogin } = useSelector((state) => state.user);
+	const { me } = useSelector((state) => state.user);
 
 	return (
 		<div>
@@ -63,7 +63,7 @@ function AppLayout({ children }) {
 				{/* 모바일에서 24칸을 모두 차지하고, 그 이상에서는 6칸을 차지한다. */}
 				{/* 모바일(xs), 태블릿(sm), 데스크톱(md) */}
 				<Col xs={24} md={6}>
-					{isLogin ? (
+					{me ? (
 						// <UserProfile setIsLogin={setIsLogin} />
 						<UserProfile/>
 					) : (

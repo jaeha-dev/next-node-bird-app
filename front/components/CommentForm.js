@@ -1,15 +1,34 @@
-import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Form, Input } from 'antd';
-import useInput from './../hooks/useInput';
 import PropTypes from 'prop-types';
+import useInput from '../hooks/useInput';
+import { addCommentRequestAction } from '../reducers/post';
 
 function CommentForm({ post }) {
+	const dispatch = useDispatch();
 	const id = useSelector((state) => state.user.me?.id);
-	const [commentText, onChangeCommentText] = useInput('');
+	const { addCommentLoading, addCommentDone } = useSelector(
+		(state) => state.post,
+	);
+	const [commentText, onChangeCommentText, setCommentText] = useInput('');
+
+	useEffect(() => {
+		if (addCommentDone) {
+			setCommentText('');
+		}
+	}, [addCommentDone]);
+
 	const onSubmitComment = useCallback(() => {
 		console.log(post.id, commentText);
-	}, [commentText]);
+		dispatch(
+			addCommentRequestAction({
+				content: commentText,
+				postId: post.id,
+				userId: id,
+			}),
+		);
+	}, [commentText, id]);
 
 	return (
 		<Form onFinish={onSubmitComment}>
@@ -23,6 +42,7 @@ function CommentForm({ post }) {
 					type="primary"
 					htmlType="submit"
 					style={{ position: 'absolute', right: 0, bottom: -40 }}
+					loading={addCommentLoading}
 				>
 					등록
 				</Button>

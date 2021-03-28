@@ -1,26 +1,37 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPostAction } from '../reducers/post';
+import { addPostRequestAction } from '../reducers/post';
+import useInput from '../hooks/useInput';
 
 function PostForm() {
 	const dispatch = useDispatch();
+	const { imagePaths, addPostLoading, addPostDone } = useSelector(
+		(state) => state.post,
+	);
+	// const [text, setText] = useState('');
+	const [text, onChangeText, setText] = useInput('');
+
+	useEffect(() => {
+		if (addPostDone) {
+			setText('');
+		}
+	}, [addPostDone]);
+
+	// const onChangeText = useCallback((e) => {
+	// 	setText(e.target.value);
+	// }, []);
+
 	const imageInput = useRef(); // DOM에 접근하기 위해 useRef 훅을 사용한다.
-	const { imagePaths } = useSelector((state) => state.post);
-	const [text, setText] = useState('');
-
-	const onChangeText = useCallback((e) => {
-		setText(e.target.value);
-	}, []);
-
 	const onClickImageUpload = useCallback(() => {
 		imageInput.current.click();
 	}, [imageInput.current]);
 
 	const onSubmit = useCallback(() => {
-		dispatch(addPostAction);
-		setText('');
-	}, []);
+		dispatch(addPostRequestAction(text));
+		// 백엔드에서 오류가 발생할 때 게시글을 초기화하면 안되므로 삭제한다.
+		// setText('');
+	}, [text]);
 
 	return (
 		<Form
@@ -37,7 +48,12 @@ function PostForm() {
 			<div>
 				<input type="file" multiple hidden ref={imageInput}/>
 				<Button onClick={onClickImageUpload}>Upload image</Button>
-				<Button type="primary" style={{ float: 'right' }} htmlType="submit">
+				<Button
+					type="primary"
+					style={{ float: 'right' }}
+					htmlType="submit"
+					loading={addPostLoading}
+				>
 					Tweet
 				</Button>
 			</div>

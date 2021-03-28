@@ -5,8 +5,9 @@
 import React from 'react';
 import Head from 'next/head';
 import { PropTypes } from 'prop-types';
+import withReduxSaga from 'next-redux-saga';
 import 'antd/dist/antd.css';
-import wrapper from './../store/configureStore';
+import wrapper from '../store/configureStore';
 
 function App({ Component }) {
 	return (
@@ -28,6 +29,7 @@ App.propTypes = {
 	Component: PropTypes.elementType.isRequired,
 };
 
-// export default App;
 // hoc로 감싼다.
-export default wrapper.withRedux(App);
+// export default App;
+// export default wrapper.withRedux(App);
+export default wrapper.withRedux(withReduxSaga(App));

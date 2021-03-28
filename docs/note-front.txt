@@ -8,6 +8,8 @@
 - yarn add redux react-redux next-redux-wrapper
 - yarn add redux-devtools-extension
 - yarn add react-slick
+- yarn add redux-saga next-redux-saga
+- yarn add -D babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks eslint-plugin-jsx-a11y
 
 2) pages 디렉터리
 - Next.js가 인식하는 디렉터리로 해당 디렉터리 내의 파일을 웹 페이지로 변환한다.
@@ -71,3 +73,67 @@
   const next = { ...prev };
   prev.a === next.a; // true
   prev === next; // false
+
+6) 제너레이터 함수
+- const gen = function* () {
+    console.log(1);
+    yield;
+    console.log(2);
+    yield;
+    console.log(3);
+    yield 4;
+  }
+- const generator = gen();
+- generator.next(); // 1을 출력하고 중지(yield), {value: undefined, done: false}
+- generator.next(); // 2를 출력하고 중지(yield), {value: undefined, done: false}
+- generator.next(); // 3을 출력하고 중지(yield), yield 4이므로 {value: 4, done: false}
+- generator.next(); // {value: undefined, done: true}
+(done: true이다.)
+- 함수를 실행하는 중에 멈추도록 할 수 있다.
+
+- const gen = function* () {
+    while (true) {
+      yield '무한';
+    }
+  };
+- const generator = gen();
+- generator.next(); // {value: "무한", done: false}
+- generator.next(); // {value: "무한", done: false}
+(무한 루프 함수이지만 제너레이터를 사용하면 next() 함수를 호출할 때만 동작한다.)
+(이벤트 리스너로 활용할 수 있다. (마우스 클릭을 했을 때 next() 함수를 호출하는 방식으로...))
+
+6-1) Saga 이펙트의 call(), fork()
+- fork() 함수는 비동기식 호출 방식이다.
+- try {
+    axios.post('/api/login');
+    // next code...
+  }
+- call() 함수는 동기식 호출 방식이다.
+- try {
+    axios.post('/api/login')
+      .then(() => {
+        // next code...
+      })
+  }
+
+- Saga 이펙트는 yield 키워드와 함께 사용한다.
+(yield 키워드는 async 함수를 사용할 때 await 키워드와 비슷한 역할을 한다.)
+(next() 함수를 호출해서 한 줄씩 테스트할 수 있므로 yield 키워드를 사용한다.)
+
+6-2) 스로틀링과 디바운싱
+- 예시: scroll 이벤트가 발생할 때마다 특정 작업으로 부하가 있는 경우 몇 초에 1번씩만 실행되도록 제한한다.
+(스로틀링)
+(마지막 함수가 호출된 후 일정 시간이 지나기 전에 다시 호출되지 않도록 하는 것)
+- 예시: input 이벤트가 발생할 때 몇 초동안 입력이 없으면 입력을 종료한 것으로 인식하고 타이머를 초기화한 후 ajax 호출을 보낸다.
+(디바운싱, 검색 창에 검색어를 입력할 때)
+(연이어 호출되는 함수들 중 마지막 함수(또는 제일 처음)만 호출하도록 하는 것)
+(https://www.zerocho.com/category/JavaScript/post/59a8e9cb15ac0000182794fa)
+
+6-3) 리듀서 & 사가
+- 1. 로그인 폼에서 정보를 입력하고 로그인 버튼을 클릭한다.
+  2. 리듀서의 loginRequestAction()이 실행된다.
+  3. 사가의 watchLogin()에서 로그인 요청 이벤트를 잡는다.
+  4. 리듀서의 스위치문(로그인 요청 케이스)이 실행된다. (5와 동시 실행되지만 조금 일찍)
+  5. 사가의 login()이 실행된다.
+  6. 사가의 put()가 실행된다. (액션 객체 리턴)
+  7. 리듀서의 스위치문(로그인 성공 케이스)이 실행된다.

@@ -1,9 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
-import AppLayout from '../components/AppLayout';
 import { useSelector } from 'react-redux';
-import PostForm from './../components/PostForm';
-import PostCard from './../components/PostCard';
+import AppLayout from '../components/AppLayout';
+import PostForm from '../components/PostForm';
+import PostCard from '../components/PostCard';
 
 function Home() {
 	const { isLogin } = useSelector((state) => state.user);

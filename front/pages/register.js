@@ -1,17 +1,21 @@
 import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
-import useInput from './../hooks/useInput';
 import styled from 'styled-components';
-import AppLayout from './../components/AppLayout';
+import useInput from '../hooks/useInput';
+import AppLayout from '../components/AppLayout';
+import { registerRequestAction } from '../reducers/user';
 
 // Style
 const ErrorMessage = styled.div`
-	color: red;
+  color: red;
 `;
 
 function Register() {
-	const [id, onChangeId] = useInput('');
+	const dispatch = useDispatch();
+	const { registerLoading } = useSelector((state) => state.user);
+	const [email, onChangeEmail] = useInput('');
 	const [nickname, onChangeNickname] = useInput('');
 	const [password, onChangePassword] = useInput('');
 
@@ -42,8 +46,9 @@ function Register() {
 		if (!term) {
 			return setTermError(true);
 		}
-		console.log(id, nickname, password);
-	}, [password, passwordCheck, term]);
+		console.log(email, nickname, password);
+		dispatch(registerRequestAction({ email, nickname, password }));
+	}, [email, password, passwordCheck, term]);
 
 	return (
 		<AppLayout>
@@ -53,13 +58,14 @@ function Register() {
 			</Head>
 			<Form onFinish={onSubmit}>
 				<div>
-					<label htmlFor="user-id">User ID</label>
+					<label htmlFor="user-email">User Email</label>
 					<br/>
 					<Input
-						name="user-id"
-						value={id}
-						required={true}
-						onChange={onChangeId}
+						name="user-email"
+						type="email"
+						value={email}
+						required
+						onChange={onChangeEmail}
 					/>
 				</div>
 				<div>
@@ -68,7 +74,7 @@ function Register() {
 					<Input
 						name="user-nickname"
 						value={nickname}
-						required={true}
+						required
 						onChange={onChangeNickname}
 					/>
 				</div>
@@ -79,7 +85,7 @@ function Register() {
 						name="user-password"
 						type="password"
 						value={password}
-						required={true}
+						required
 						onChange={onChangePassword}
 					/>
 				</div>
@@ -90,7 +96,7 @@ function Register() {
 						name="user-password-check"
 						type="password"
 						value={passwordCheck}
-						required={true}
+						required
 						onChange={onChangePasswordCheck}
 					/>
 					{passwordError && <ErrorMessage>Check password!</ErrorMessage>}
@@ -103,7 +109,7 @@ function Register() {
 				</div>
 				<div style={{ marginTop: 10 }}>
 					{/* submit 타입의 버튼은 onFinish 이벤트를 호출한다. */}
-					<Button type="primary" htmlType="submit">
+					<Button type="primary" htmlType="submit" loading={registerLoading}>
 						Register
 					</Button>
 				</div>

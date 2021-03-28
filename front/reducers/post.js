@@ -39,9 +39,17 @@ export const initialState = {
 	],
 	// 이미지 업로드 시, 이미지 경로를 저장할 배열
 	imagePaths: [],
-	// 게시글 등록 완료 여부
-	postAdded: false,
+	addPostLoading: false, // 게시글 등록 시도 중
+	addPostDone: false,
+	addPostError: null,
 };
+
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 const dummyPost = {
 	id: 2,
@@ -54,19 +62,57 @@ const dummyPost = {
 	Comments: [],
 };
 
-const ADD_POST = 'ADD_POST';
-export const addPostAction = {
-	type: ADD_POST,
-};
+export const addPostRequestAction = (data) => ({
+	type: ADD_POST_REQUEST,
+	data,
+});
+
+export const addCommentRequestAction = (data) => ({
+	type: ADD_COMMENT_REQUEST,
+	data,
+});
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case ADD_POST:
+		case ADD_POST_REQUEST:
+			return {
+				...state,
+				addPostLoading: true,
+				addPostDone: false,
+				addPostError: null,
+			};
+		case ADD_POST_SUCCESS:
 			return {
 				...state,
 				// 새롭게 등록한 게시글이 위로 가도록 한다.
 				mainPosts: [dummyPost, ...state.mainPosts],
-				postAdded: true,
+				addPostLoading: false,
+				addPostDone: true,
+			};
+		case ADD_POST_FAILURE:
+			return {
+				...state,
+				addPostLoading: false,
+				addPostError: action.error,
+			};
+		case ADD_COMMENT_REQUEST:
+			return {
+				...state,
+				addCommentLoading: true,
+				addCommentDone: false,
+				addCommentError: null,
+			};
+		case ADD_COMMENT_SUCCESS:
+			return {
+				...state,
+				addCommentLoading: false,
+				addCommentDone: true,
+			};
+		case ADD_COMMENT_FAILURE:
+			return {
+				...state,
+				addCommentLoading: false,
+				addCommentError: action.error,
 			};
 		default:
 			return state;

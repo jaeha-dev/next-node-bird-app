@@ -27,7 +27,7 @@ function ImagesZoom({ images, onClose }) {
 					<Slick
 						initialSide={0}
 						afterChange={(slide) => setCurrentSlide(slide)}
-						infinite={true}
+						infinite
 						arrows={false}
 						slidesToShow={1}
 						slidesToScroll={1}
