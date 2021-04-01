@@ -24,24 +24,6 @@ function LoginForm() {
 	const [email, onChangeEmail] = useInput('');
 	const [password, onChangePassword] = useInput('');
 
-	// const [id, setId] = useState('');
-	// const [password, setPassword] = useState('');
-
-	// // 함수를 캐싱하기 위해 useCallback 훅을 사용한다.
-	// const onChangeId = useCallback(
-	// 	(e) => {
-	// 		setId(e.target.value);
-	// 	},
-	// 	[id],
-	// );
-
-	// const onChangePassword = useCallback(
-	// 	(e) => {
-	// 		setPassword(e.target.value);
-	// 	},
-	// 	[password],
-	// );
-
 	// 값을 캐싱하기 위해 useMemo 훅을 사용한다.
 	const LabelStyle = useMemo(
 		() => ({
@@ -53,9 +35,6 @@ function LoginForm() {
 	const onSubmitForm = useCallback(() => {
 		// antd에서는 사용하지 않는다.
 		// e.preventDefault();
-		console.log(email, password);
-
-		// setIsLogin(true);
 		dispatch(loginRequestAction({ email, password }));
 	}, [email, password]);
 
@@ -65,13 +44,7 @@ function LoginForm() {
 				<label htmlFor="user-email" style={LabelStyle}>
 					User Email
 				</label>
-				<Input
-					name="user-email"
-					type="email"
-					value={email}
-					onChange={onChangeEmail}
-					required
-				/>
+				<Input name="user-email" type="email" value={email} onChange={onChangeEmail} required/>
 			</div>
 			<div>
 				<label htmlFor="user-password" style={LabelStyle}>
@@ -100,9 +73,5 @@ function LoginForm() {
 		</FormWrapper>
 	);
 }
-
-// LoginForm.propTypes = {
-// 	setIsLogin: PropTypes.func.isRequired,
-// };
 
 export default LoginForm;

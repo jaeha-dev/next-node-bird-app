@@ -26,9 +26,6 @@ const Global = createGlobalStyle`
 `;
 
 function AppLayout({ children }) {
-	// Redux를 사용하므로 삭제한다.
-	// const [isLogin, setIsLogin] = useState(false);
-	// const isLogin = useSelector((state) => state.user.isLogin);
 	const { me } = useSelector((state) => state.user);
 
 	return (
@@ -63,13 +60,7 @@ function AppLayout({ children }) {
 				{/* 모바일에서 24칸을 모두 차지하고, 그 이상에서는 6칸을 차지한다. */}
 				{/* 모바일(xs), 태블릿(sm), 데스크톱(md) */}
 				<Col xs={24} md={6}>
-					{me ? (
-						// <UserProfile setIsLogin={setIsLogin} />
-						<UserProfile/>
-					) : (
-						// <LoginForm setIsLogin={setIsLogin} />
-						<LoginForm/>
-					)}
+					{me ? <UserProfile/> : <LoginForm/>}
 				</Col>
 				{/* 모바일에서 24칸을 모두 차지하고, 그 이상에서는 12칸을 차지한다. */}
 				<Col xs={24} md={12}>
@@ -78,11 +69,7 @@ function AppLayout({ children }) {
 				{/* 모바일에서 24칸을 모두 차지하고, 그 이상에서는 6칸을 차지한다. */}
 				<Col xs={24} md={6}>
 					{/* 새 창에서 열기는 보안 위협 문제로 noreferrer noopnener를 추가한다. */}
-					<a
-						href="https://inflearn.com"
-						target="_blank"
-						rel="noreferrer noopener"
-					>
+					<a href="https://inflearn.com" target="_blank" rel="noreferrer noopener">
 						Go to Inflearn
 					</a>
 				</Col>

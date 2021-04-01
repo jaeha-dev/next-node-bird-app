@@ -15,12 +15,12 @@ const configureStore = () => {
 	// 배열에는 saga, thunk 등을 추가해야 한다. (saga와 logger 미들웨어만 사용한다.)
 	const middlewares = [loggerMiddleware, sagaMiddleware];
 	// Redux의 기능을 확장한다는 의미에서 enhancer라 명명하였다.
+	// true: Redux DevTools와 연동한다.
+	// false: 개발 모드일 때 상태들의 History가 기록된다. (보안상 취약하므로 개발 모드일 때만 사용한다.)
 	const enhancer =
 		process.env.NODE_ENV === 'production'
 			? compose(applyMiddleware(...middlewares))
-			: // Redux DevTools와 연동한다.
-				// 개발 모드일 때 상태들의 History가 기록된다. (보안상 취약하므로 개발 모드일 때만 사용한다.)
-			composeWithDevTools(applyMiddleware(...middlewares));
+			: composeWithDevTools(applyMiddleware(...middlewares));
 
 	const store = createStore(rootReducer, enhancer);
 	store.sagaTask = sagaMiddleware.run(rootSaga);

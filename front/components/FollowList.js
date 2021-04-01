@@ -13,10 +13,10 @@ function FollowList({ header, data }) {
 			header={<div>{header}</div>}
 			loadMore={
 				<div style={{ textAlign: 'center', margin: '10px 0' }}>
-					<Button>Load more</Button>
+					<Button>더 보기</Button>
 				</div>
 			}
-			bordered={false}
+			bordered
 			// data 배열의 각 item을 리스트의 아이템으로 그린다.
 			dataSource={data}
 			renderItem={(item) => (

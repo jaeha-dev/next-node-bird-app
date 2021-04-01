@@ -7,16 +7,23 @@ import {
 	EllipsisOutlined,
 } from '@ant-design/icons';
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { removePostRequestAction } from '../reducers/post';
 
 function PostCard({ post }) {
+	const dispatch = useDispatch();
 	const { me } = useSelector((state) => state.user);
+	const { removePostLoding } = useSelector((state) => state.post);
 	const id = me && me.id;
 	// const id = me?.id; // 옵셔널 체이닝을 사용해도 된다.
+
+	const onRemovePost = useCallback(() => {
+		dispatch(removePostRequestAction({ post }));
+	}, [post]);
 
 	const [like, setLike] = useState(false);
 	const onToggleLike = useCallback(() => {
@@ -37,11 +44,7 @@ function PostCard({ post }) {
 					<RetweetOutlined key="retweet"/>,
 					// 좋아요 버튼 분기
 					like ? (
-						<HeartTwoTone
-							key="like"
-							twoToneColor="#eb2f96"
-							onClick={onToggleLike}
-						/>
+						<HeartTwoTone key="like" twoToneColor="#eb2f96" onClick={onToggleLike}/>
 					) : (
 						<HeartOutlined key="like" onClick={onToggleLike}/>
 					),
@@ -53,11 +56,13 @@ function PostCard({ post }) {
 							<Button.Group>
 								{id && post.User.id === id && (
 									<>
-										<Button>Edit</Button>
-										<Button type="danger">Remove</Button>
+										<Button>수정</Button>
+										<Button type="danger" loading={removePostLoding} onClick={onRemovePost}>
+											삭제
+										</Button>
 									</>
 								)}
-								<Button>Report</Button>
+								<Button>신고</Button>
 							</Button.Group>
 						}
 					>

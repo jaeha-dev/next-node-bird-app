@@ -4,12 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { logoutAction } from '../reducers';
 import { logoutRequestAction } from '../reducers/user';
 
-// function UserProfile({ setIsLogin }) {
 function UserProfile() {
 	const dispatch = useDispatch();
 	const { me, logoutLoading } = useSelector((state) => state.user);
 	const onClickLogout = useCallback(() => {
-		// setIsLogin(false);
 		dispatch(logoutRequestAction());
 	}, []);
 
@@ -34,10 +32,7 @@ function UserProfile() {
 				</div>,
 			]}
 		>
-			<Card.Meta
-				avatar={<Avatar>{me.nickname[0]}</Avatar>}
-				title={me.nickname}
-			/>
+			<Card.Meta avatar={<Avatar>{me.nickname[0]}</Avatar>} title={me.nickname}/>
 			<Button onClick={onClickLogout} loading={logoutLoading}>
 				Logout
 			</Button>

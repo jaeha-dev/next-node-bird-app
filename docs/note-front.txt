@@ -10,6 +10,7 @@
 - yarn add react-slick
 - yarn add redux-saga next-redux-saga
 - yarn add -D babel-eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react-hooks eslint-plugin-jsx-a11y
+- yarn add shortid faker immer
 
 2) pages 디렉터리
 - Next.js가 인식하는 디렉터리로 해당 디렉터리 내의 파일을 웹 페이지로 변환한다.
@@ -55,6 +56,10 @@
         name: action.data, // 변경할 값만 바꿔서 새로운 객체를 생성한다.
       }
   }
+
+- 불변성을 지킬 수 없는 함수: push, pop, shift, unshift, splice
+- 불변성을 지킬 수 있는 함수(새로운 배열을 반환): concat, filter, map
+(https://hyeok999.github.io/2020/02/03/react-velo-21)
 
 5-3) 왜 새로운 객체를 생성하는지?
 - 값의 변경을 기록하기 위해서이다. (디버깅, 테스트 등의 용이성 때문)

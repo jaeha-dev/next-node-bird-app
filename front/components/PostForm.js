@@ -6,21 +6,15 @@ import useInput from '../hooks/useInput';
 
 function PostForm() {
 	const dispatch = useDispatch();
-	const { imagePaths, addPostLoading, addPostDone } = useSelector(
-		(state) => state.post,
-	);
-	// const [text, setText] = useState('');
+	const { imagePaths, addPostLoading, addPostDone } = useSelector((state) => state.post);
 	const [text, onChangeText, setText] = useInput('');
 
 	useEffect(() => {
+		// addPostDone 상태가 true일 때만 값을 초기화한다.
 		if (addPostDone) {
 			setText('');
 		}
 	}, [addPostDone]);
-
-	// const onChangeText = useCallback((e) => {
-	// 	setText(e.target.value);
-	// }, []);
 
 	const imageInput = useRef(); // DOM에 접근하기 위해 useRef 훅을 사용한다.
 	const onClickImageUpload = useCallback(() => {
@@ -34,17 +28,8 @@ function PostForm() {
 	}, [text]);
 
 	return (
-		<Form
-			style={{ margin: '10px 0 20px' }}
-			encType="multipart/form-data"
-			onFinish={onSubmit}
-		>
-			<Input.TextArea
-				value={text}
-				onChange={onChangeText}
-				maxLength={100}
-				placeholder="?"
-			/>
+		<Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
+			<Input.TextArea value={text} onChange={onChangeText} maxLength={100} placeholder="?"/>
 			<div>
 				<input type="file" multiple hidden ref={imageInput}/>
 				<Button onClick={onClickImageUpload}>Upload image</Button>

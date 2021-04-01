@@ -16,7 +16,7 @@ function PostImages({ images }) {
 	if (images.length === 1) {
 		return (
 			<>
-				<img src={images[0].src} alt={images[0].src} onClick={onZoom}/>
+				<img src={images[0].src} alt={images[0].src} onClick={onZoom} role="presentation"/>
 				{showImagesZoom && <ImagesZoom images={images} onClose={onClose}/>}
 			</>
 		);
@@ -29,12 +29,14 @@ function PostImages({ images }) {
 					style={{ width: '50%', display: 'inline-block' }}
 					alt={images[0].src}
 					onClick={onZoom}
+					role="presentation"
 				/>
 				<img
 					src={images[1].src}
 					style={{ width: '50%', display: 'inline-block' }}
 					alt={images[1].src}
 					onClick={onZoom}
+					role="presentation"
 				/>
 				{showImagesZoom && <ImagesZoom images={images} onClose={onClose}/>}
 			</>
@@ -49,6 +51,7 @@ function PostImages({ images }) {
 					style={{ width: '50%' }}
 					alt={images[0].src}
 					onClick={onZoom}
+					role="presentation"
 				/>
 				<div
 					style={{
@@ -58,6 +61,7 @@ function PostImages({ images }) {
 						verticalAlign: 'middle',
 					}}
 					onClick={onZoom}
+					role="presentation"
 				>
 					<PlusOutlined/>
 					<br/>
@@ -70,7 +74,11 @@ function PostImages({ images }) {
 }
 
 PostImages.propTypes = {
-	images: PropTypes.arrayOf(PropTypes.object),
+	images: PropTypes.arrayOf(
+		PropTypes.shape({
+			src: PropTypes.string,
+		}),
+	).isRequired,
 };
 
 export default PostImages;

@@ -46,8 +46,8 @@ function Register() {
 		if (!term) {
 			return setTermError(true);
 		}
-		console.log(email, nickname, password);
-		dispatch(registerRequestAction({ email, nickname, password }));
+
+		return dispatch(registerRequestAction({ email, nickname, password }));
 	}, [email, password, passwordCheck, term]);
 
 	return (
@@ -60,23 +60,12 @@ function Register() {
 				<div>
 					<label htmlFor="user-email">User Email</label>
 					<br/>
-					<Input
-						name="user-email"
-						type="email"
-						value={email}
-						required
-						onChange={onChangeEmail}
-					/>
+					<Input name="user-email" type="email" value={email} required onChange={onChangeEmail}/>
 				</div>
 				<div>
 					<label htmlFor="user-nickname">Nickname</label>
 					<br/>
-					<Input
-						name="user-nickname"
-						value={nickname}
-						required
-						onChange={onChangeNickname}
-					/>
+					<Input name="user-nickname" value={nickname} required onChange={onChangeNickname}/>
 				</div>
 				<div>
 					<label htmlFor="user-password">Password</label>
