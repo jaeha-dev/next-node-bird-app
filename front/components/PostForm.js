@@ -29,17 +29,22 @@ function PostForm() {
 
 	return (
 		<Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
-			<Input.TextArea value={text} onChange={onChangeText} maxLength={100} placeholder="?"/>
+			<Input.TextArea
+				value={text}
+				onChange={onChangeText}
+				maxLength={100}
+				placeholder="게시글 등록"
+			/>
 			<div>
 				<input type="file" multiple hidden ref={imageInput}/>
-				<Button onClick={onClickImageUpload}>Upload image</Button>
+				<Button onClick={onClickImageUpload}>이미지</Button>
 				<Button
 					type="primary"
 					style={{ float: 'right' }}
 					htmlType="submit"
 					loading={addPostLoading}
 				>
-					Tweet
+					등록
 				</Button>
 			</div>
 			<div>
@@ -47,7 +52,7 @@ function PostForm() {
 					<div key={path} style={{ display: 'inline-block' }}>
 						<img src={path} style={{ width: '200px' }} alt={path}/>
 						<div>
-							<Button>Remove</Button>
+							<Button>삭제</Button>
 						</div>
 					</div>
 				))}

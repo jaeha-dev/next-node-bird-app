@@ -15,7 +15,6 @@ function App({ Component }) {
 				<meta charSet="uft-8"/>
 				<title>Node Bird</title>
 			</Head>
-			<div>공통 메뉴</div>
 			<Component/>
 		</>
 	);
@@ -24,6 +23,10 @@ function App({ Component }) {
 App.propTypes = {
 	Component: PropTypes.elementType.isRequired,
 };
+
+export function reportWebVitals(metric) {
+	console.log(metric);
+}
 
 // hoc로 감싼다.
 // export default App;

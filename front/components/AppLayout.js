@@ -34,7 +34,7 @@ function AppLayout({ children }) {
 			<Menu mode="horizontal">
 				<Menu.Item>
 					<Link href="/">
-						<a>노드버드</a>
+						<a>노드 버드</a>
 					</Link>
 				</Menu.Item>
 				<Menu.Item>

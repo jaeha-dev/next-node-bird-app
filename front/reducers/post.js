@@ -1,47 +1,15 @@
 import shortId from 'shortid';
+import faker from 'faker';
 import produce from '../utils/produce';
 
 export const initialState = {
-	mainPosts: [
-		{
-			id: 1,
-			User: {
-				id: 1,
-				nickname: 'user1',
-			},
-			content: '첫 번째 게시글 #해시태그 #익스프레스',
-			Images: [
-				{
-					src:
-						'https://media.vlpt.us/images/fstone/post/9f5c4502-8820-48dd-8e66-8cd402530e35/redux-logo-landscape.png',
-				},
-				{
-					src:
-						'https://media.vlpt.us/images/fstone/post/9f5c4502-8820-48dd-8e66-8cd402530e35/redux-logo-landscape.png',
-				},
-				{
-					src:
-						'https://media.vlpt.us/images/fstone/post/9f5c4502-8820-48dd-8e66-8cd402530e35/redux-logo-landscape.png',
-				},
-			],
-			Comments: [
-				{
-					User: {
-						nickname: 'user2',
-					},
-					content: '댓글1',
-				},
-				{
-					User: {
-						nickname: 'user3',
-					},
-					content: '댓글2',
-				},
-			],
-		},
-	],
+	mainPosts: [],
 	// 이미지 업로드 시, 이미지 경로를 저장할 배열
 	imagePaths: [],
+	hasMorePosts: true,
+	loadPostsLoading: false, // 게시글 목록 조회 시도 중
+	loadPostsDone: false,
+	loadPostsError: null,
 	addPostLoading: false, // 게시글 등록 시도 중
 	addPostDone: false,
 	addPostError: null,
@@ -56,6 +24,55 @@ export const initialState = {
 	removeCommentError: null,
 };
 
+export const generateDummyPost = (number) =>
+	Array(number)
+		.fill()
+		.map(() => ({
+			id: shortId.generate(),
+			User: {
+				id: shortId.generate(),
+				nickname: faker.name.findName(),
+			},
+			content: faker.lorem.paragraph(),
+			Images: [
+				{
+					src: faker.image.image(),
+				},
+			],
+			Comments: [
+				{
+					User: {
+						id: shortId.generate(),
+						nickname: faker.name.findName(),
+					},
+					content: faker.lorem.sentence(),
+				},
+			],
+		}));
+
+const dummyPost = (data) => ({
+	id: data.id,
+	content: data.content,
+	User: {
+		id: 1,
+		nickname: '제로초',
+	},
+	Images: [],
+	Comments: [],
+});
+
+const dummyComment = (data) => ({
+	id: shortId.generate(),
+	content: data,
+	User: {
+		id: 1,
+		nickname: '제로초',
+	},
+});
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -68,26 +85,6 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 export const REMOVE_COMMENT_REQUEST = 'REMOVE_COMMENT_REQUEST';
 export const REMOVE_COMMENT_SUCCESS = 'REMOVE_COMMENT_SUCCESS';
 export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE';
-
-const dummyPost = (data) => ({
-	id: data.id,
-	content: data.content,
-	User: {
-		id: 1,
-		nickname: 'user1',
-	},
-	Images: [],
-	Comments: [],
-});
-
-const dummyComment = (data) => ({
-	id: shortId.generate(),
-	content: data,
-	User: {
-		id: 1,
-		nickname: 'test',
-	},
-});
 
 export const addPostRequestAction = (data) => ({
 	type: ADD_POST_REQUEST,
@@ -116,6 +113,21 @@ export const removeCommentRequestAction = (data) => ({
 const reducer = (state = initialState, action) =>
 	produce(state, (draft) => {
 		switch (action.type) {
+			case LOAD_POSTS_REQUEST:
+				draft.loadPostsLoading = true;
+				draft.loadPostsDone = false;
+				draft.loadPostsError = null;
+				break;
+			case LOAD_POSTS_SUCCESS:
+				draft.loadPostsLoading = false;
+				draft.loadPostsDone = true;
+				draft.mainPosts = action.data.concat(draft.mainPosts);
+				draft.hasMorePosts = draft.mainPosts.length < 50;
+				break;
+			case LOAD_POSTS_FAILURE:
+				draft.loadPostsLoading = false;
+				draft.loadPostsError = action.error;
+				break;
 			case ADD_POST_REQUEST:
 				draft.addPostLoading = true;
 				draft.addPostDone = false;
@@ -163,26 +175,6 @@ const reducer = (state = initialState, action) =>
 				draft.addCommentLoading = false;
 				draft.addCommentError = action.error;
 				break;
-			// TODO
-			// case REMOVE_COMMENT_REQUEST:
-			//   return {
-			//     ...state,
-			//     removeCommentLoading: true,
-			//     removeCommentDone: false,
-			//     removeCommentError: null,
-			//   };
-			// case REMOVE_COMMENT_SUCCESS:
-			//   return {
-			//     ...state,
-			//     removeCommentLoading: false,
-			//     removeCommentDone: true,
-			//   };
-			// case REMOVE_COMMENT_FAILURE:
-			//   return {
-			//     ...state,
-			//     removeCommentLoading: false,
-			//     removeCommentError: action.error,
-			//   };
 			default:
 				break;
 		}

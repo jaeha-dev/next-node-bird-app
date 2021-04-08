@@ -13,6 +13,7 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { removePostRequestAction } from '../reducers/post';
+import FollowButton from './FollowButton';
 
 function PostCard({ post }) {
 	const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function PostCard({ post }) {
 
 	const onRemovePost = useCallback(() => {
 		dispatch(removePostRequestAction({ post }));
-	}, [post]);
+	}, []);
 
 	const [like, setLike] = useState(false);
 	const onToggleLike = useCallback(() => {
@@ -69,6 +70,7 @@ function PostCard({ post }) {
 						<EllipsisOutlined/>
 					</Popover>,
 				]}
+				extra={<FollowButton post={post}/>}
 			>
 				<Card.Meta
 					avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

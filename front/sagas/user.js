@@ -1,6 +1,6 @@
 // Saga 이펙트 (이펙트는 yield 키워드와 함께 사용한다.)
 import { all, fork, put, takeLatest, delay } from 'redux-saga/effects';
-import axios from 'axios';
+// import axios from 'axios';
 import {
 	LOGIN_REQUEST,
 	LOGIN_SUCCESS,
@@ -11,20 +11,33 @@ import {
 	REGISTER_REQUEST,
 	REGISTER_SUCCESS,
 	REGISTER_FAILURE,
+	FOLLOW_REQUEST,
+	FOLLOW_SUCCESS,
+	FOLLOW_FAILURE,
+	UNFOLLOW_REQUEST,
+	UNFOLLOW_SUCCESS,
+	UNFOLLOW_FAILURE,
 } from '../reducers/user';
 
-function loginApi(data) {
-	// function loginApi(data, a, b) {
-	return axios.post('/api/login', data);
-}
+// function loginApi(data) {
+//   return axios.post('/api/login', data);
+// }
 
-function logoutApi() {
-	return axios.post('/api/logout');
-}
+// function logoutApi() {
+//   return axios.post('/api/logout');
+// }
 
-function registerApi() {
-	return axios.post('/api/register');
-}
+// function registerApi() {
+//   return axios.post('/api/register');
+// }
+
+// function followAPI() {
+//   return axios.post('/api/follow');
+// }
+
+// function unfollowAPI() {
+//   return axios.post('/api/unfollow');
+// }
 
 function* login(action) {
 	try {
@@ -41,26 +54,27 @@ function* login(action) {
 			// data: result.data, // 성공 결과
 			data: action.data,
 		});
-	} catch (e) {
+	} catch (err) {
+		console.error(err);
 		yield put({
 			type: LOGIN_FAILURE,
-			error: e.response.data, // 실패 결과
+			error: err.response.data, // 실패 결과
 		});
 	}
 }
 
 function* logout() {
 	try {
-		// const result = yield call(logoutApi);
+		// const result = yield call(logOutAPI);
 		yield delay(1000);
 		yield put({
 			type: LOGOUT_SUCCESS,
-			// data: result.data,
 		});
-	} catch (e) {
+	} catch (err) {
+		console.error(err);
 		yield put({
 			type: LOGOUT_FAILURE,
-			error: e.response.data,
+			error: err.response.data,
 		});
 	}
 }
@@ -71,12 +85,44 @@ function* register() {
 		yield delay(1000);
 		yield put({
 			type: REGISTER_SUCCESS,
-			// data: result.data,
 		});
-	} catch (e) {
+	} catch (err) {
+		console.error(err);
 		yield put({
 			type: REGISTER_FAILURE,
-			error: e.response.data,
+			error: err.response.data,
+		});
+	}
+}
+
+function* follow(action) {
+	try {
+		yield delay(1000);
+		yield put({
+			type: FOLLOW_SUCCESS,
+			data: action.data,
+		});
+	} catch (err) {
+		console.error(err);
+		yield put({
+			type: FOLLOW_FAILURE,
+			error: err.response.data,
+		});
+	}
+}
+
+function* unfollow(action) {
+	try {
+		yield delay(1000);
+		yield put({
+			type: UNFOLLOW_SUCCESS,
+			data: action.data,
+		});
+	} catch (err) {
+		console.error(err);
+		yield put({
+			type: UNFOLLOW_FAILURE,
+			error: err.response.data,
 		});
 	}
 }
@@ -102,6 +148,20 @@ function* watchRegister() {
 	yield takeLatest(REGISTER_REQUEST, register);
 }
 
+function* watchFollow() {
+	yield takeLatest(FOLLOW_REQUEST, follow);
+}
+
+function* watchUnfollow() {
+	yield takeLatest(UNFOLLOW_REQUEST, unfollow);
+}
+
 export default function* userSaga() {
-	yield all([fork(watchLogin), fork(watchLogout), fork(watchRegister)]);
+	yield all([
+		fork(watchLogin),
+		fork(watchLogout),
+		fork(watchRegister),
+		fork(watchFollow),
+		fork(watchUnfollow),
+	]);
 }

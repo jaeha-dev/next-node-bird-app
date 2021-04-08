@@ -42,13 +42,13 @@ function LoginForm() {
 		<FormWrapper onFinish={onSubmitForm}>
 			<div>
 				<label htmlFor="user-email" style={LabelStyle}>
-					User Email
+					이메일
 				</label>
 				<Input name="user-email" type="email" value={email} onChange={onChangeEmail} required/>
 			</div>
 			<div>
 				<label htmlFor="user-password" style={LabelStyle}>
-					Password
+					비밀번호
 				</label>
 				<Input
 					name="user-password"
@@ -64,10 +64,10 @@ function LoginForm() {
 			{/* <div style={{ marginTop: 10 }}> */}
 			<ButtonWrapper>
 				<Button type="primary" htmlType="submit" loading={loginLoading}>
-					Login
+					로그인
 				</Button>
 				<Link href="/register">
-					<Button>Register</Button>
+					<Button>계정 등록</Button>
 				</Link>
 			</ButtonWrapper>
 		</FormWrapper>

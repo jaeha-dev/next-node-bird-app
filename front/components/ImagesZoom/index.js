@@ -32,9 +32,9 @@ function ImagesZoom({ images, onClose }) {
 						slidesToShow={1}
 						slidesToScroll={1}
 					>
-						{images.map((image) => (
-							<ImageWrapper key={image.src}>
-								<img src={image.src} alt={image.src}/>
+						{images.map((v) => (
+							<ImageWrapper key={v.src}>
+								<img src={v.src} alt={v.src}/>
 							</ImageWrapper>
 						))}
 					</Slick>
@@ -50,7 +50,11 @@ function ImagesZoom({ images, onClose }) {
 }
 
 ImagesZoom.propTypes = {
-	images: PropTypes.arrayOf(PropTypes.object).isRequired,
+	images: PropTypes.arrayOf(
+		PropTypes.shape({
+			src: PropTypes.string,
+		}),
+	).isRequired,
 	onClose: PropTypes.func.isRequired,
 };
 

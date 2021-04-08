@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useState, useEffect } from 'react';
 import Head from 'next/head';
+import Router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
@@ -14,7 +15,7 @@ const ErrorMessage = styled.div`
 
 function Register() {
 	const dispatch = useDispatch();
-	const { registerLoading } = useSelector((state) => state.user);
+	const { registerLoading, me } = useSelector((state) => state.user);
 	const [email, onChangeEmail] = useInput('');
 	const [nickname, onChangeNickname] = useInput('');
 	const [password, onChangePassword] = useInput('');
@@ -35,8 +36,15 @@ function Register() {
 	const [termError, setTermError] = useState(false);
 	const onChangeTerm = useCallback((e) => {
 		setTerm(e.target.checked);
-		// setTermError(!termError);
-	});
+		setTermError(false);
+	}, []);
+
+	// 로그인 상태일 때 메인 페이지로 이동한다.
+	useEffect(() => {
+		if (me) {
+			Router.push('/');
+		}
+	}, [me && me.id]);
 
 	// 계정 등록 시, 비밀번호 일치 여부와 약관 동의 여부를 확인한다.
 	const onSubmit = useCallback(() => {
@@ -54,21 +62,21 @@ function Register() {
 		<AppLayout>
 			<Head>
 				<meta charSet="uft-8"/>
-				<title>Register : Node Bird</title>
+				<title>계정 등록 : Node Bird</title>
 			</Head>
 			<Form onFinish={onSubmit}>
 				<div>
-					<label htmlFor="user-email">User Email</label>
+					<label htmlFor="user-email">이메일</label>
 					<br/>
 					<Input name="user-email" type="email" value={email} required onChange={onChangeEmail}/>
 				</div>
 				<div>
-					<label htmlFor="user-nickname">Nickname</label>
+					<label htmlFor="user-nickname">닉네임</label>
 					<br/>
 					<Input name="user-nickname" value={nickname} required onChange={onChangeNickname}/>
 				</div>
 				<div>
-					<label htmlFor="user-password">Password</label>
+					<label htmlFor="user-password">비밀번호</label>
 					<br/>
 					<Input
 						name="user-password"
@@ -79,7 +87,7 @@ function Register() {
 					/>
 				</div>
 				<div>
-					<label htmlFor="user-password-check">Password Check</label>
+					<label htmlFor="user-password-check">비밀번호 확인</label>
 					<br/>
 					<Input
 						name="user-password-check"
@@ -88,18 +96,18 @@ function Register() {
 						required
 						onChange={onChangePasswordCheck}
 					/>
-					{passwordError && <ErrorMessage>Check password!</ErrorMessage>}
+					{passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
 				</div>
 				<div>
 					<Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-						Check term
+						이용 약관
 					</Checkbox>
-					{termError && <ErrorMessage>Check term!</ErrorMessage>}
+					{termError && <ErrorMessage>이용 약관을 동의해야 합니다.</ErrorMessage>}
 				</div>
 				<div style={{ marginTop: 10 }}>
 					{/* submit 타입의 버튼은 onFinish 이벤트를 호출한다. */}
 					<Button type="primary" htmlType="submit" loading={registerLoading}>
-						Register
+						계정 등록
 					</Button>
 				</div>
 			</Form>

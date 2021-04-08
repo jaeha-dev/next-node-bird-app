@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-// import { logoutAction } from '../reducers';
 import { logoutRequestAction } from '../reducers/user';
 
 function UserProfile() {
@@ -16,17 +15,17 @@ function UserProfile() {
 			// JSX에서 배열을 사용할 때, key 속성을 반드시 사용한다.)
 			actions={[
 				<div key="tweet">
-					Tweets:
+					게시글:
 					<br/>
 					{me.Posts.length}
 				</div>,
 				<div key="followings">
-					Followings:
+					팔로잉:
 					<br/>
 					{me.Followings.length}
 				</div>,
 				<div key="followers">
-					Followers:
+					팔로워:
 					<br/>
 					{me.Followers.length}
 				</div>,
@@ -34,7 +33,7 @@ function UserProfile() {
 		>
 			<Card.Meta avatar={<Avatar>{me.nickname[0]}</Avatar>} title={me.nickname}/>
 			<Button onClick={onClickLogout} loading={logoutLoading}>
-				Logout
+				로그아웃
 			</Button>
 		</Card>
 	);

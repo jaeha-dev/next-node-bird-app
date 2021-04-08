@@ -13,6 +13,12 @@ export const initialState = {
 	changeNicknameLoading: false, // 닉네임 수정 시도 중
 	changeNicknameDone: false,
 	changeNicknameError: null,
+	followLoading: false, // 팔로우 시도중
+	followDone: false,
+	followError: null,
+	unfollowLoading: false, // 언팔로우 시도중
+	unfollowDone: false,
+	unfollowError: null,
 	me: null,
 	registerData: {},
 	loginData: {},
@@ -36,12 +42,12 @@ export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
-export const ADD_POST_ME = 'ADD_POST_ME';
-export const REMOVE_POST_ME = 'REMOVE_POST_ME';
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 const dummyUser = (data) => ({
 	...data,
-	nickname: 'test',
+	nickname: '제로초',
 	id: 1,
 	Posts: [{ id: 1 }],
 	Followings: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
@@ -60,6 +66,21 @@ export const logoutRequestAction = () => ({
 
 export const registerRequestAction = (data) => ({
 	type: REGISTER_REQUEST,
+	data,
+});
+
+export const changeNicknameRequestAction = (data) => ({
+	type: CHANGE_NICKNAME_REQUEST,
+	data,
+});
+
+export const followRequestAction = (data) => ({
+	type: FOLLOW_REQUEST,
+	data,
+});
+
+export const unfollowRequestAction = (data) => ({
+	type: UNFOLLOW_REQUEST,
 	data,
 });
 
@@ -120,7 +141,7 @@ const reducer = (state = initialState, action) =>
 				draft.changeNicknameLoading = false;
 				draft.changeNicknameError = action.error;
 				break;
-			case ADD_POST_ME:
+			case ADD_POST_TO_ME:
 				draft.me.Posts.unshift({ id: action.data });
 				break;
 			// return {
@@ -130,7 +151,7 @@ const reducer = (state = initialState, action) =>
 			//     Posts: [{ id: action.data }, ...state.me.Posts],
 			//   },
 			// };
-			case REMOVE_POST_ME:
+			case REMOVE_POST_OF_ME:
 				draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
 				break;
 			// return {
@@ -140,6 +161,34 @@ const reducer = (state = initialState, action) =>
 			//     Posts: state.me.Posts.filter((v) => v.id !== action.data),
 			//   },
 			// };
+			case FOLLOW_REQUEST:
+				draft.followLoading = true;
+				draft.followError = null;
+				draft.followDone = false;
+				break;
+			case FOLLOW_SUCCESS:
+				draft.followLoading = false;
+				draft.me.Followings.push({ id: action.data });
+				draft.followDone = true;
+				break;
+			case FOLLOW_FAILURE:
+				draft.followLoading = false;
+				draft.followError = action.error;
+				break;
+			case UNFOLLOW_REQUEST:
+				draft.unfollowLoading = true;
+				draft.unfollowError = null;
+				draft.unfollowDone = false;
+				break;
+			case UNFOLLOW_SUCCESS:
+				draft.unfollowLoading = false;
+				draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+				draft.unfollowDone = true;
+				break;
+			case UNFOLLOW_FAILURE:
+				draft.unfollowLoading = false;
+				draft.unfollowError = action.error;
+				break;
 			default:
 				break;
 		}
